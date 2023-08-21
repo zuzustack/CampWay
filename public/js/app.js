@@ -20590,7 +20590,7 @@ var actions = {
           case 0:
             _this.status = STATUS.FETCHING;
             _context.prev = 1;
-            response = _plugins_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post('/auth/login', {
+            response = _plugins_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/auth/login", {
               username: email,
               password: password,
               isAdmin: true
@@ -20608,31 +20608,16 @@ var actions = {
         }
       }, _callee, null, [[1, 7]]);
     }))();
-  },
-  check: function check() {
-    return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            response = _plugins_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/test');
-            return _context2.abrupt("return", response);
-          case 2:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2);
-    }))();
   }
 };
 var persistenceConfig = {
   beforeRestore: function beforeRestore(context) {
     console.log("about to restore '".concat(context.store.$id, "'"));
   },
-  paths: ['data']
+  paths: ["data"]
 };
 var useAuthStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)({
-  id: 'auth',
+  id: "auth",
   state: function state() {
     return _state;
   },

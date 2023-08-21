@@ -19,7 +19,7 @@ const routes =[
         path: "/signup",
         name: "signup-auth",
         component: SignupAuth
-    }
+    },
 ]
 
 const router = createRouter({
