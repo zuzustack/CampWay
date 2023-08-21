@@ -1,0 +1,100 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+
+.hero{
+    width: 100vw;
+    height: calc(100vh - 48px);
+    position: relative;
+}
+
+body{
+    overflow-x: hidden !important;
+}
+
+.no-border{
+    border: 0px none !important;
+}
+
+
+.hero-img{
+    background-image: url("/assets/img/background_1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    filter: brightness(.45);
+    position: absolute;
+    z-index: -1;
+    border-bottom: 1px solid gray;
+}
+
+.hero-label{
+    z-index: 1;
+    color: white;
+    height: 100%;
+}
+
+.bg-login{
+    background-image: url("/assets/img/background_1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.filter-bg{
+    filter: brightness(.45);
+}
+
+.jjc{
+    justify-content: center !important;
+}
+
+.pic{
+    place-items: center;
+}
+
+.bg-absolute{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.active-white{
+    background-color: white !important;
+}
+
+
+.bg-violet{
+    background-color: #6c5ce7 !important;
+    color: white !important;
+}
+
+.btn-violet{
+    background-color: #6c5ce7 !important;
+    color: white;
+}
+
+.btn-violet:hover{
+    border: 1px solid white;
+}
+
+.book-cover{
+    width: 175px !important;
+    height: fit-content;
+}
+
+.w-fit{
+    width: fit-content !important;
+}
+
+.w-full{
+    width: 100vw !important;
+}
+
+.h-full-nav{
+    height: calc(100vh - 48px);
+}
+
+.h-full{
+    height: 100vh;
+}

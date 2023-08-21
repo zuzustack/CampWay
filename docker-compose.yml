@@ -1,0 +1,23 @@
+version: '3.16'
+
+services:
+  website:
+    image: cbtsmpn36:latest
+    ports:
+      - "8000:80"
+      - "8001:8000"
+    volumes: 
+      - .:/var/www/html
+    environment:
+     - TZ=Asia/Jakarta
+  database:
+    image: mysql:latest
+    restart: always
+    environment:
+      TZ: Asia/Jakarta
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user' # fardhu root 
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - 3306:3306
