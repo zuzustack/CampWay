@@ -104,14 +104,14 @@
 
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#">Previous</a>
+                        <li v-if="currentPage != 1" class="page-item">
+                            <a class="page-link" href="#" v-on:click="() => currentPage--">Previous</a>
                         </li>
                         <li v-for="a in totalPage" class="page-item" :key="a">
-                            <a :class="`page-link ${ (a == currentPage) ? 'active' : ''}`" v-on:click="() => {currentPage = a}" href="#">{{ a }}</a>
+                            <a :class="`page-link ${ (a == currentPage) ? 'active' : ''}`" v-on:click="() => currentPage = a" href="#">{{ a }}</a>
                         </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
+                        <li v-if="currentPage != totalPage" class="page-item">
+                            <a v-on:click="() => currentPage++" class="page-link" href="#">Next</a>
                         </li>
                     </ul>
                 </nav>
@@ -130,7 +130,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                            Create
+                            Update
                         </h1>
                         <button
                             type="button"
@@ -221,7 +221,7 @@
                             v-on:click="updateStudyProgram"
                             class="btn btn-success"
                         >
-                            Create
+                            Update
                         </button>
                     </div>
                 </div>
@@ -240,7 +240,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                            Update
+                            Create
                         </h1>
                         <button
                             type="button"
@@ -331,7 +331,7 @@
                             v-on:click="createStudyProgram"
                             class="btn btn-success"
                         >
-                            Update
+                            Create
                         </button>
                     </div>
                 </div>
@@ -377,6 +377,7 @@ export default {
 
     watch: {
         currentPage(){
+            this.onLoad = true;
             this.fetchData();
         }
     },
@@ -416,7 +417,7 @@ export default {
             createStudyProgram(this.formData).then((response) => {
                 swal.toast("success", "Success Create Program Study");
 
-                this.lists = response.data.data;
+                this.fetchData();
 
                 this.formData = {
                     name: "",
@@ -440,7 +441,7 @@ export default {
                 (result) => {
                     if (result.isConfirmed) {
                         deleteStudyProgram(this.id, id).then((response) => {
-                            this.lists = response.data.data;
+                            this.fetchData();
                             swal.toast(
                                 "success",
                                 "Success Delete Program Study"
@@ -457,7 +458,7 @@ export default {
             updateStudyProgram(this.idUpdate, this.updateData).then(
                 (response) => {
                     swal.toast("success", "Success Update Program Study");
-                    this.lists = response.data.data;
+                    this.fetchData();
                 }
             );
         },
