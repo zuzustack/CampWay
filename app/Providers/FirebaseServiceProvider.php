@@ -7,13 +7,14 @@ use Kreait\Firebase\Factory;
 
 class FirebaseServiceProvider {
     private $credentials = __DIR__ . "/../../credentials.json";
-    private $firebase, $table, $database, $reference;
+    private $firebase, $table, $database, $reference, $result;
+    private $afterQuery = false;
 
     // Connection Parameter reference to table
     public function connect($reference = ""){
         $this->firebase = (new Factory)
             ->withServiceAccount($this->credentials)
-            ->withDatabaseUri(env("FIREBASE_URL"));
+            ->withDatabaseUri("https://pbo-campway-default-rtdb.asia-southeast1.firebasedatabase.app");
         $this->database = $this->firebase->createDatabase();
 
         if ($reference != "") {
@@ -53,48 +54,112 @@ class FirebaseServiceProvider {
 
     // Find by id
     public function find($uuid){
-        $this->table = $this->table
+        $this->afterQuery = true;
+        $this->result = $this->table
             ->orderByKey()
-            ->equalTo($uuid);
+            ->equalTo($uuid)
+            ->getValue();
 
         return $this;
     }
 
 
     public function findByChild($child, $value){
-        $this->table = $this->table
+        $this->afterQuery = true;
+        $this->result = $this->table
             ->orderByChild($child)
-            ->equalTo($value);
+            ->equalTo($value)
+            ->get();
 
+        return $this;
+    }
+
+    public function orderBy($child, $by = "asc"){
+        uasort($this->result, function($a,$b) use($child, $by) {
+            $valueA = (string)$a[$child];
+            $valueB = (string)$b[$child];
+
+            if ($by == "asc") {
+                $test = strcmp($valueA,$valueB);
+            } else {
+                $test = strcmp($valueB,$valueA);
+            }
+
+            if ($test == 0) {
+                return 0;
+            } else if ($test > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+
+        });
+        return $this;
+    }
+
+    public function limitAndSkip($limit, $skip){
+        $arr = [];
+        $index = 1;
+        foreach ($this->result as $key => $value) {
+            if ($index > $skip) {
+                $arr[$key] = $value;
+            }
+
+            if ($index >= ($limit + $skip)) {
+                break;
+            } else {
+                $index++;
+            }
+        }
+
+        $this->result = $arr;
         return $this;
     }
 
     // Get Data
     public function equalTo($child ,$value){
-        return $this->table
-                    ->orderByChild($child)
-                    ->equalTo($value)
-                    ->getValue();
+        $this->afterQuery = true;
+        $this->result = $this->table
+            ->orderByChild($child)
+            ->equalTo($value)
+            ->getValue();
+        return $this;
     }
 
 
     // Get Data
     public function get(){
-        return $this->table->getvalue();
+        if ($this->afterQuery) {
+            return $this->result;
+        } else {
+            return $this->table->getValue();
+        }
     }
 
 
     // Yah Where lahya
     public function where($column,$operator,$valueWhere){
-        $this->table = $this->table
-                        ->orderByChild($column);
-        $data = $this->table->getvalue();    
+        $this->afterQuery = true;
+        try {
+            $this->table = $this->table
+                ->orderByChild($column);
+            $data = $this->table->getvalue(); 
+        } catch (\Throwable $th) {
+            $data = $this->table->getvalue();
+        }
         $arr = [];
         
         switch ($operator) {
             case 'like':
                 foreach ($data as $key => $value) {
                     if (is_int(strpos($value[$column],$valueWhere))) {
+                        $arr[$key] = $value;
+                    }
+                }
+                break;
+            case 'ilike':
+                foreach ($data as $key => $value) {
+                    if (is_int(strpos(strtolower($value[$column]),strtolower($valueWhere)))) {
                         $arr[$key] = $value;
                     }
                 }
@@ -138,6 +203,7 @@ class FirebaseServiceProvider {
                 break;
         }
 
-        return $arr;
+        $this->result = $arr;
+        return $this;
     }
 }

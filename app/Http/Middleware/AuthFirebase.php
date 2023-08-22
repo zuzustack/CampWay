@@ -17,7 +17,11 @@ class AuthFirebase
     public function handle(Request $request, Closure $next): Response
     {
         if (AuthController::checkAuth($request)) {
-            return $next($request);            
+            return $next($request);
+        } else {
+            return response()->json([
+                'message' => 'unauthentication'
+            ], 401);
         }
     }
 }

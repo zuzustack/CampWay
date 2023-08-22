@@ -1,15 +1,60 @@
 <template>
     <div>
-        <h4 class="mb-3">Detail College</h4>
+        <h4>Detail College</h4>
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="formGroupExampleInput" class="form-label">
+                            Name
+                        </label>
+                        <input
+                            class="form-control"
+                            type="text"
+                            v-model="college.name"
+                        />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="formGroupExampleInput" class="form-label">
+                            Link
+                        </label>
+                        <input
+                            class="form-control"
+                            type="text"
+                            v-model="college.link"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>List Study Program</h4>
         <div class="card shadow">
             <div class="card-body">
-                <router-link :to="{name: 'collegeManagement'}" class="btn btn-secondary me-2">Back</router-link>
-                <div
-                    class="btn btn-success"
-                    data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop"
-                >
-                    Create
+                <div class="row">
+                    <div class="col-md-8">
+                        <router-link
+                            :to="{ name: 'collegeManagement' }"
+                            class="btn btn-secondary me-2"
+                            >Back</router-link
+                        >
+                        <div
+                            class="btn btn-success"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop"
+                        >
+                            Create
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <input
+                            @input="setSearch"
+                            v-model="search"
+                            class="form-control"
+                            type="text"
+                            placeholder="search..."
+                        />
+                    </div>
                 </div>
                 <table class="table table-striped mt-3">
                     <thead>
@@ -22,9 +67,9 @@
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-if="!onLoad">
                         <tr v-for="(list, id, index) in lists" :key="index">
-                            <th scope="row">{{ index + 1 }}</th>
+                            <th scope="row">{{ (currentPage - 1) * 10 + index + 1 }}</th>
                             <td>{{ list.name }}</td>
                             <td>{{ list.link }}</td>
                             <td>{{ list.avgSbmptn }}</td>
@@ -48,6 +93,28 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <div
+                    v-if="onLoad"
+                    class="spinner-border mx-auto d-block mt-3"
+                    role="status"
+                >
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#">Previous</a>
+                        </li>
+                        <li v-for="a in totalPage" class="page-item" :key="a">
+                            <a :class="`page-link ${ (a == currentPage) ? 'active' : ''}`" v-on:click="() => {currentPage = a}" href="#">{{ a }}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
 
@@ -282,6 +349,8 @@ import swal from "../plugins/swal";
 export default {
     data() {
         return {
+            college: {},
+            search: "",
             formData: {
                 name: "",
                 link: "",
@@ -295,33 +364,58 @@ export default {
                 link: "",
                 avgSbmptn: 0,
                 avgSnpmb: 0,
+                uuid_college: "",
             },
             id: "",
             lists: [],
+            onLoad: true,
+            typingTimer: "",
+            currentPage: 1,
+            totalPage: 0,
         };
+    },
+
+    watch: {
+        currentPage(){
+            this.fetchData();
+        }
     },
 
     methods: {
         fetchData() {
             const { getCollege } = useCollegeStore();
             const { getStudyProgram } = useStudyProgramStore();
-            swal.showLoading();
             getCollege(this.id).then((response) => {
                 if (response.data.data.length == 0) {
                     router.push({ name: "collegeManagement" });
                 }
+                this.college = response.data.data[this.id];
             });
 
-            getStudyProgram(this.id).then((response) => {
+            getStudyProgram(this.id, this.search, this.currentPage).then((response) => {
                 this.lists = response.data.data;
+                this.totalPage = response.data.page;
+                this.onLoad = false;
                 swal.close();
             });
+        },
+
+        setSearch(e) {
+            clearTimeout(this.typingTimer);
+            this.typingTimer = setTimeout(() => {
+                console.log(this.search);
+                this.search = e.target.value;
+                this.onLoad = true;
+                this.fetchData();
+            }, 500);
         },
 
         createStudyProgram() {
             const { createStudyProgram } = useStudyProgramStore();
 
             createStudyProgram(this.formData).then((response) => {
+                swal.toast("success", "Success Create Program Study");
+
                 this.lists = response.data.data;
 
                 this.formData = {
@@ -345,9 +439,12 @@ export default {
                 "Are you sure you want to delete this data?",
                 (result) => {
                     if (result.isConfirmed) {
-                        deleteStudyProgram(id).then((response) => {
+                        deleteStudyProgram(this.id, id).then((response) => {
                             this.lists = response.data.data;
-                            swal.toast("success", "Success Delete Program Study")
+                            swal.toast(
+                                "success",
+                                "Success Delete Program Study"
+                            );
                         });
                     }
                 }
@@ -359,6 +456,7 @@ export default {
 
             updateStudyProgram(this.idUpdate, this.updateData).then(
                 (response) => {
+                    swal.toast("success", "Success Update Program Study");
                     this.lists = response.data.data;
                 }
             );
@@ -366,6 +464,7 @@ export default {
     },
 
     mounted() {
+        swal.showLoading();
         this.id = this.$route.params.id;
         this.formData.uuid_college = this.id;
         this.fetchData();

@@ -1,7 +1,7 @@
 import axios from "axios";
 import router from '../routes'
 import { getActivePinia } from "pinia"
-
+import swal from '../plugins/swal'
 
 const axiosIns = axios.create({
   // You can add your headers here
@@ -20,6 +20,7 @@ axiosIns.interceptors.response.use(
     if (response.response.status === 401) {
       getActivePinia()._s.forEach(store => store.$reset());
 
+      swal.close();
       localStorage.setItem("authToken", "")
       localStorage.setItem("userAbilities", "")
       localStorage.setItem("userData", "")

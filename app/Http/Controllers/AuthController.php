@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function authLogin(Request $request){
         $users =  new FirebaseServiceProvider();
         $users->connect('users');
-        $data = $users->where('email','=',$request->email);
+        $data = $users->where('email','=',$request->email)->get();
         $id = key((array)$data);
 
         
@@ -24,7 +24,7 @@ class AuthController extends Controller
                 'created_at' => $now->toDateTimeString(),
                 'expired_date' => $now->addDays(1)->toDateTimeString(),
             ]);
-            $tokenData = $users->where('created_at', "=", $now->addDays(-1)->toDateTimeString());
+            $tokenData = $users->where('created_at', "=", $now->addDays(-1)->toDateTimeString())->get();
             $token = key((array)$tokenData);
 
 

@@ -10,10 +10,10 @@ const state = {
 };
 
 const actions = {
-    async getStudyProgram(id) {
+    async getStudyProgram(id,search,page) {
         this.status = "fetching";
         try {
-            const response = axios.get(`/studyProgram?id=${id}`, setHeader());
+            const response = axios.get(`/studyProgram?id=${id}&search=${search}&page=${page}`, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -32,10 +32,10 @@ const actions = {
             throw e;
         }
     },
-    async deleteStudyProgram(id) {
+    async deleteStudyProgram(uuid,id) {
         this.status = "fetching";
         try {
-            const response = axios.delete(`/studyProgram/${id}`, setHeader());
+            const response = axios.delete(`/studyProgram/${id}?id=${uuid}`, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -46,7 +46,7 @@ const actions = {
     async createStudyProgram(formData) {
         this.status = "fetching";
         try {
-            const response = axios.post("/studyProgram",formData, setHeader());
+            const response = axios.post(`/studyProgram`,formData, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {

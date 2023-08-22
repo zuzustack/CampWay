@@ -16,7 +16,6 @@ class CollegeController extends Controller
         } else {
             $data = $data->connect('colleges')->get();
         }
-
         return response()->json([
             'data' => $data,
             'id' => $request->id

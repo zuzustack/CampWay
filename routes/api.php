@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("/auth/login", [AuthController::class, 'authLogin']);
 
-Route::middleware('auth.base')->group(function(){
+Route::middleware(['auth.base'])->group(function(){
     Route::get("/auth/me", [AuthController::class, 'authMe']);
 
     // Books Management

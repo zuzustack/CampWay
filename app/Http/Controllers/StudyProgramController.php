@@ -11,9 +11,17 @@ class StudyProgramController extends Controller
         $data = new FirebaseServiceProvider();
         $data = $data->connect('studyPrograms')->equalTo('uuid_college', $request->id);
 
+        if ($request->search) {
+            $data = $data->where("name", "ilike", $request->search);
+        };
+
+        $count = count($data->get());
+        $data->orderBy('name', 'asc');
+        $data->limitAndSkip(10, ($request->page - 1) * 10);
 
         return response()->json([
-            'data' => $data
+            'data' => $data->get(),
+            'page' => ceil($count / 10)
         ]);
     }
 
@@ -30,7 +38,7 @@ class StudyProgramController extends Controller
 
 
         return response()->json([
-            'data' => $data->get()
+            'data' => $data->equalTo('uuid_college', $request->uuid_college)->get()
         ]);
     }
 
@@ -46,18 +54,18 @@ class StudyProgramController extends Controller
         ]);
 
         return response()->json([
-            'data' => $data->get()
+            'data' => $data->equalTo('uuid_college', $request->uuid_college)->get()
         ]);
     }
 
-    public function deleteStudyProgram($id){
+    public function deleteStudyProgram(Request $request,$id){
         $data = new FirebaseServiceProvider();
         $data = $data->connect('studyPrograms');
         $data->delete($id);
 
         
         return response()->json([
-            'data' => $data->get()
+            'data' => $data->equalTo('uuid_college', $request->id)->get()
         ]);
     }
 }
