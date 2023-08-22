@@ -13,7 +13,7 @@ class FirebaseServiceProvider {
     public function connect($reference = ""){
         $this->firebase = (new Factory)
             ->withServiceAccount($this->credentials)
-            ->withDatabaseUri("https://pbo-campway-default-rtdb.asia-southeast1.firebasedatabase.app");
+            ->withDatabaseUri(env("FIREBASE_URL"));
         $this->database = $this->firebase->createDatabase();
 
         if ($reference != "") {
