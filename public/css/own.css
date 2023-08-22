@@ -8,6 +8,7 @@
 
 body{
     overflow-x: hidden !important;
+    background-color: rgb(236, 236, 236);
 }
 
 .no-border{
@@ -59,13 +60,14 @@ body{
     height: 100%;
 }
 
-.active-white{
+.router-link-active{
+    color: black !important;
     background-color: white !important;
 }
 
 
 .bg-violet{
-    background-color: #6c5ce7 !important;
+    background-color: #2980b9 !important;
     color: white !important;
 }
 

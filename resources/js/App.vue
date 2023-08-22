@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import NavbarGuest from './components/NavbarGuest.vue'
+// import NavbarGuest from './components/NavbarGuest.vue'
 export default {
-    components: { NavbarGuest },
+    // components: { NavbarGuest },
 };
 </script>

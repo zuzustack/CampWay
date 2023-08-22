@@ -13,7 +13,7 @@ class FirebaseServiceProvider {
     public function connect($reference = ""){
         $this->firebase = (new Factory)
             ->withServiceAccount($this->credentials)
-            ->withDatabaseUri(env("FIREBASE_URL"));
+            ->withDatabaseUri("https://pbo-campway-default-rtdb.asia-southeast1.firebasedatabase.app");
         $this->database = $this->firebase->createDatabase();
 
         if ($reference != "") {
@@ -61,6 +61,23 @@ class FirebaseServiceProvider {
     }
 
 
+    public function findByChild($child, $value){
+        $this->table = $this->table
+            ->orderByChild($child)
+            ->equalTo($value);
+
+        return $this;
+    }
+
+    // Get Data
+    public function equalTo($child ,$value){
+        return $this->table
+                    ->orderByChild($child)
+                    ->equalTo($value)
+                    ->getValue();
+    }
+
+
     // Get Data
     public function get(){
         return $this->table->getvalue();
@@ -68,7 +85,7 @@ class FirebaseServiceProvider {
 
 
     // Yah Where lahya
-    public function where($column,$operator,$value){
+    public function where($column,$operator,$valueWhere){
         $this->table = $this->table
                         ->orderByChild($column);
         $data = $this->table->getvalue();    
@@ -76,49 +93,48 @@ class FirebaseServiceProvider {
         
         switch ($operator) {
             case 'like':
-                foreach ($data as $dt) {
-                    if (is_int(strpos($dt[$column],$value))) {
-                        array_push($arr,$dt);
+                foreach ($data as $key => $value) {
+                    if (is_int(strpos($value[$column],$valueWhere))) {
+                        $arr[$key] = $value;
                     }
                 }
                 break;
             case '=':
-                foreach ($data as $dt) {
-                    if ($dt[$column] == $value) {
-                        array_push($arr,$dt);
+                foreach ($data as $key => $value) {
+                    if ($value[$column] == $valueWhere) {
+                        $arr[$key] = $value;
                     }
                 }
                 break;
             case '<':
-                foreach ($data as $dt) {
-                    if ($dt[$column] < $value) {
-                        array_push($arr,$dt);
+                foreach ($data as $key => $value) {
+                    if ($value[$column] == $valueWhere) {
+                        $arr[$key] = $value;
                     }
                 }
                 break;
             case '>':
-                foreach ($data as $dt) {
-                    if ($dt[$column] > $value) {
-                        array_push($arr,$dt);
+                foreach ($data as $key => $value) {
+                    if ($value[$column] == $valueWhere) {
+                        $arr[$key] = $value;
                     }
                 }
                 break;
             case '>=':
-                foreach ($data as $dt) {
-                    if ($dt[$column] >= $value) {
-                        array_push($arr,$dt);
+                foreach ($data as $key => $value) {
+                    if ($value[$column] == $valueWhere) {
+                        $arr[$key] = $value;
                     }
                 }
                 break;
             case '<=':
-                foreach ($data as $dt) {
-                    if ($dt[$column] <= $value) {
-                        array_push($arr,$dt);
+                foreach ($data as $key => $value) {
+                    if ($value[$column] == $valueWhere) {
+                        $arr[$key] = $value;
                     }
                 }
                 break;
             default:
-                # code...
                 break;
         }
 

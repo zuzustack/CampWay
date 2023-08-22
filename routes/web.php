@@ -21,26 +21,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::domain('admin.localhost')->group(function() {
-    Route::get('/home', function() {
-        return view('admin.home');
-    })->name('admin.home');
-
-    Route::get('/college', function() {
-        return view('admin.college');
-    })->name('admin.college');
-
-    Route::get('/', function() {
-        return view('auth.loginView');
-    })->name('auth.loginView');
-
-
-    Route::get('/sign-up', function() {
-        return view('auth.signupView');
-    })->name('auth.signupView');
+    Route::get('{any}', function () {
+        return view('admin');
+    })->where('any','.*');
 });
 
 Route::domain('localhost')->group(function() {
     Route::get('{any}', function () {
-        return view('vue-template');
+        return view('user');
     })->where('any','.*');
 });

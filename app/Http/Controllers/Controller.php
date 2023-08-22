@@ -10,6 +10,11 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+    protected $firebase;
 
-    protected $firebase = new FirebaseServiceProvider();
+
+    function __construct()
+    {
+        $this->firebase = new FirebaseServiceProvider();
+    }
 }
