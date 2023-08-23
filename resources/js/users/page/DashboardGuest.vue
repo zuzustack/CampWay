@@ -71,20 +71,12 @@
 </template>
 
 <script>
-import NavbarGuest from '../components/NavbarGuest.vue';
-import { useAuthStore } from '../store/modules/AuthModule';
+import NavbarGuest from '../../components/NavbarGuest.vue';
+import { useAuthStore } from '../../store/modules/AuthModule';
 
 export default {
     components: {
         NavbarGuest
     },
-
-    async mounted(){
-        const {check} = useAuthStore();
-
-        await check().then((response) => {
-            console.log(response);
-        });
-    }
 }
 </script>

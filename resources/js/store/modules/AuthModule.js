@@ -2,7 +2,9 @@ import { defineStore } from "pinia";
 
 // import { STATUS } from '@/store/baseTypes'
 // import { setHeader } from './utils'
-import axios from "../../plugins/axios";
+import users from "../../plugins/axiosUsers";
+import admin from "../../plugins/axiosAdmin";
+import { setHeader } from "./utils";
 
 const state = {
     status: "idle",
@@ -11,17 +13,28 @@ const state = {
 };
 
 const actions = {
-    async authLogin(email, password) {
-        this.status = STATUS.FETCHING;
+    async authLogin(formData) {
+        this.status = "fetching";
         try {
-            const response = axios.post("/auth/login", {
-                username: email,
-                password: password,
+            const response = admin.post("/auth/login", {
+                email: formData.email,
+                password: formData.password,
                 isAdmin: true,
             });
-
             this.data = response.data;
+            return response;
+        } catch (e) {
+            this.status = "idle";
+            throw e;
+        }
+    },
 
+
+    async me(formData) {
+        this.status = "fetching";
+        try {
+            const response = admin.get("/auth/me", setHeader());
+            this.data = response.data;
             return response;
         } catch (e) {
             this.status = "idle";

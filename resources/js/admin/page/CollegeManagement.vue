@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="card">
+        <h4 class="mb-3">College Management</h4>
+        <div class="card shadow">
             <div class="card-body">
-                <h3 class="mb-3">Book Management</h3>
                 <div
                     class="ms-auto btn btn-success mb-2"
                     data-bs-toggle="modal"
@@ -14,19 +14,23 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Title</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Link</th>
-                            <th scope="col">Image</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(list, id, index) in lists" :key="index">
                             <th scope="row">{{ index + 1 }}</th>
-                            <td>{{ list.title }}</td>
+                            <td>{{ list.name }}</td>
                             <td>{{ list.link }}</td>
-                            <td>{{ list.imageLink }}</td>
-                            <td style="width: 200px">
+                            <td style="width: 280px">
+                                <div
+                                    v-on:click="detail(id)"
+                                    class="btn btn-success me-2"
+                                >
+                                    Detail
+                                </div>
                                 <div
                                     v-on:click="showUpdateModal(id, list)"
                                     data-bs-toggle="modal"
@@ -36,8 +40,8 @@
                                     Update
                                 </div>
                                 <div
-                                    v-on:click="deleteBook(id)"
-                                    class="btn btn-danger"
+                                    v-on:click="deleteCollege(id)"
+                                    class="btn btn-danger me-2"
                                 >
                                     Delete
                                 </div>
@@ -75,10 +79,10 @@
                                 for="formGroupExampleInput"
                                 class="form-label"
                             >
-                                Title
+                                Name
                             </label>
                             <input
-                                v-model="formData.title"
+                                v-model="formData.name"
                                 type="text"
                                 class="form-control"
                                 id="formGroupExampleInput"
@@ -98,20 +102,6 @@
                                 id="formGroupExampleInput"
                             />
                         </div>
-                        <div class="mb-3">
-                            <label
-                                for="formGroupExampleInput"
-                                class="form-label"
-                            >
-                                Image Link
-                            </label>
-                            <input
-                                v-model="formData.imageLink"
-                                type="text"
-                                class="form-control"
-                                id="formGroupExampleInput"
-                            />
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -124,7 +114,7 @@
                         <button
                             type="button"
                             data-bs-dismiss="modal"
-                            v-on:click="createBook"
+                            v-on:click="createCollege"
                             class="btn btn-success"
                         >
                             Create
@@ -164,7 +154,7 @@
                                 Title
                             </label>
                             <input
-                                v-model="updateData.title"
+                                v-model="updateData.name"
                                 type="text"
                                 class="form-control"
                                 id="formGroupExampleInput"
@@ -184,20 +174,6 @@
                                 id="formGroupExampleInput"
                             />
                         </div>
-                        <div class="mb-3">
-                            <label
-                                for="formGroupExampleInput"
-                                class="form-label"
-                            >
-                                Image Link
-                            </label>
-                            <input
-                                v-model="updateData.imageLink"
-                                type="text"
-                                class="form-control"
-                                id="formGroupExampleInput"
-                            />
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -210,7 +186,7 @@
                         <button
                             type="button"
                             data-bs-dismiss="modal"
-                            v-on:click="updateBook"
+                            v-on:click="updateCollege"
                             class="btn btn-success"
                         >
                             Update
@@ -223,22 +199,21 @@
 </template>
 
 <script>
-import { useBookStore } from "../store/modules/BookModule";
-import swal from "../plugins/swal";
+import router from "../routes";
+import { useCollegeStore } from "../../store/modules/CollegeModule";
+import swal from "../../plugins/swal"
 
 export default {
     data() {
         return {
             formData: {
-                title: "",
+                name: "",
                 link: "",
-                imageLink: "",
             },
 
             updateData: {
-                title: "",
+                name: "",
                 link: "",
-                imageLink: "",
             },
             idUpdate: "",
 
@@ -248,21 +223,20 @@ export default {
 
     methods: {
         fetchData() {
-            const { getBook } = useBookStore();
+            const { getCollege } = useCollegeStore();
             swal.showLoading();
-            getBook().then((response) => {
+            getCollege().then((response) => {
                 this.lists = response.data.data;
                 swal.close();
             });
         },
 
-        createBook() {
-            const { createBook } = useBookStore();
+        createCollege() {
+            const { createCollege } = useCollegeStore();
 
-            createBook(this.formData).then((response) => {
-                swal.toast("success", "Success Create Book");
+            createCollege(this.formData).then((response) => {
+                swal.toast("success", "Success Create College");
                 this.lists = response.data.data;
-
                 this.formData = {
                     title: "",
                     link: "",
@@ -271,13 +245,23 @@ export default {
             });
         },
 
-        deleteBook(id) {
-            const { deleteBook } = useBookStore();
+        deleteCollege(id) {
+            const { deleteCollege } = useCollegeStore();
+            swal.confirm(
+                "Are you sure you want to delete this data?",
+                (result) => {
+                    if (result.isConfirmed) {
+                        deleteCollege(id).then((response) => {
+                            this.lists = response.data.data;
+                            swal.toast("success", "Success Delete College")
+                        });
+                    }
+                }
+            );
+        },
 
-            deleteBook(id).then((response) => {
-                swal.toast("success", "Success Delete Books");
-                this.lists = response.data.data;
-            });
+        detail(id) {
+            router.push({ name: "detailCollege", params: { id: id } });
         },
 
         showUpdateModal(id, list) {
@@ -285,11 +269,11 @@ export default {
             this.idUpdate = id;
         },
 
-        updateBook() {
-            const { updateBook } = useBookStore();
+        updateCollege() {
+            const { updateCollege } = useCollegeStore();
 
-            updateBook(this.idUpdate, this.updateData).then((response) => {
-                swal.toast("success", "Success Update Book");
+            updateCollege(this.idUpdate, this.updateData).then((response) => {
+                swal.toast("success", "Success Edit College");
                 this.lists = response.data.data;
             });
         },

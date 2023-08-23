@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 
-import axios from "../../plugins/axios";
+// import { STATUS } from '@/store/baseTypes'
+// import { setHeader } from './utils'
+import users from "../../plugins/axiosUsers";
+import admin from "../../plugins/axiosAdmin";
 import { setHeader } from "./utils";
 
 const state = {
@@ -10,10 +13,14 @@ const state = {
 };
 
 const actions = {
-    async getStudyProgram(id,search,page) {
+    async getCollege(id) {
         this.status = "fetching";
         try {
-            const response = axios.get(`/studyProgram?id=${id}&search=${search}&page=${page}`, setHeader());
+            let $params = "?"
+            if (id) {
+                $params += `id=${id}`
+            }
+            const response = admin.get(`/college${$params}`, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -21,10 +28,10 @@ const actions = {
             throw e;
         }
     },
-    async updateStudyProgram(id,formData) {
+    async updateCollege(id,formData) {
         this.status = "fetching";
         try {
-            const response = axios.patch(`/studyProgram/${id}`, formData ,setHeader());
+            const response = admin.patch(`/college/${id}`, formData ,setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -32,10 +39,10 @@ const actions = {
             throw e;
         }
     },
-    async deleteStudyProgram(uuid,id) {
+    async deleteCollege(id) {
         this.status = "fetching";
         try {
-            const response = axios.delete(`/studyProgram/${id}?id=${uuid}`, setHeader());
+            const response = admin.delete(`/college/${id}`, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -43,10 +50,10 @@ const actions = {
             throw e;
         }
     },
-    async createStudyProgram(formData) {
+    async createCollege(formData) {
         this.status = "fetching";
         try {
-            const response = axios.post(`/studyProgram`,formData, setHeader());
+            const response = admin.post("/college",formData, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -63,8 +70,8 @@ const persistenceConfig = {
     paths: ["data"],
 };
 
-export const useStudyProgramStore = defineStore({
-    id: "studyProgramStore",
+export const useCollegeStore = defineStore({
+    id: "collegeStore",
     state: () => state,
     actions: actions,
     persist: persistenceConfig,

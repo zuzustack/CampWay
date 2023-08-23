@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 
 // import { STATUS } from '@/store/baseTypes'
 // import { setHeader } from './utils'
-import axios from "../../plugins/axios";
+import users from "../../plugins/axiosUsers";
+import admin from "../../plugins/axiosAdmin";
 import { setHeader } from "./utils";
 
 const state = {
@@ -15,7 +16,7 @@ const actions = {
     async getBook() {
         this.status = "fetching";
         try {
-            const response = axios.get("/book", setHeader());
+            const response = admin.get("/book", setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -26,7 +27,7 @@ const actions = {
     async updateBook(id,formData) {
         this.status = "fetching";
         try {
-            const response = axios.patch(`/book/${id}`, formData ,setHeader());
+            const response = admin.patch(`/book/${id}`, formData ,setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -37,7 +38,7 @@ const actions = {
     async deleteBook(id) {
         this.status = "fetching";
         try {
-            const response = axios.delete(`/book/${id}`, setHeader());
+            const response = admin.delete(`/book/${id}`, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -48,7 +49,7 @@ const actions = {
     async createBook(formData) {
         this.status = "fetching";
         try {
-            const response = axios.post("/book",formData, setHeader());
+            const response = admin.post("/book",formData, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {

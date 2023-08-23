@@ -1,7 +1,7 @@
 import axios from "axios";
-import router from '../routes'
+import router from '../admin/routes'
 import { getActivePinia } from "pinia"
-import swal from '../plugins/swal'
+import swal from './swal'
 
 const axiosIns = axios.create({
   // You can add your headers here

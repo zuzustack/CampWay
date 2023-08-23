@@ -342,9 +342,9 @@
 
 <script>
 import router from "../routes";
-import { useCollegeStore } from "../store/modules/CollegeModule";
-import { useStudyProgramStore } from "../store/modules/StudyProgramModule";
-import swal from "../plugins/swal";
+import { useCollegeStore } from "../../store/modules/CollegeModule";
+import { useStudyProgramStore } from "../../store/modules/StudyProgramModule";
+import swal from "../../plugins/swal";
 
 export default {
     data() {
@@ -404,7 +404,7 @@ export default {
         setSearch(e) {
             clearTimeout(this.typingTimer);
             this.typingTimer = setTimeout(() => {
-                console.log(this.search);
+                this.currentPage = 1;
                 this.search = e.target.value;
                 this.onLoad = true;
                 this.fetchData();

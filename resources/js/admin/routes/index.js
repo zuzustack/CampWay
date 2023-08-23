@@ -4,7 +4,7 @@ import HomePage from "../page/HomePage"
 import BookManagement from "../page/BookManagement"
 import CollegeManagement from "../page/CollegeManagement"
 import CollegeDetail from "../page/CollegeDetail"
-import LayoutAdmin from "../layout/LayoutAdmin"
+import LayoutAdmin from "../../layout/LayoutAdmin"
 
 
 

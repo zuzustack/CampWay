@@ -97,6 +97,20 @@ class FirebaseServiceProvider {
         return $this;
     }
 
+    public function join($reference, $foreignId, $localId){
+        $table = $this->database->getReference($reference)->getValue();
+
+        foreach ($this->result as $key => $value) {
+            foreach ($table as $keyT => $valueT) {
+                if ($localId == 'id' && $value[$foreignId] == $keyT) {
+                    $this->result[$key][$keyT] = $valueT;
+                }
+            }
+        }
+
+        return $this;
+    }
+
     public function limitAndSkip($limit, $skip){
         $arr = [];
         $index = 1;

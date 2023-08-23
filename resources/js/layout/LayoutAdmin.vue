@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import NavbarVue from '../components/Navbar.vue'
-import SidebarVue from '../components/Sidebar.vue'
+import NavbarVue from '../../js/components/Navbar.vue'
+import SidebarVue from '../../js/components/Sidebar.vue'
 
 export default {
     components: {

@@ -6,7 +6,7 @@
 
 
 <script>
-import { useAuthStore } from '../store/modules/AuthModule'
+import { useAuthStore } from '../../store/modules/AuthModule'
 
 export default {
     mounted(){

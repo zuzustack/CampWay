@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '../store/modules/AuthModule'
+import { useAuthStore } from '../../store/modules/AuthModule'
 import router from '../routes';
 
 export default {
