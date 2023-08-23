@@ -63,7 +63,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Link</th>
                             <th scope="col">Avg SBMPTN</th>
-                            <th scope="col">Avg SNPMB</th>
+                            <th scope="col">Avg SNBP</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -73,7 +73,7 @@
                             <td>{{ list.name }}</td>
                             <td>{{ list.link }}</td>
                             <td>{{ list.avgSbmptn }}</td>
-                            <td>{{ list.avgSnpmb }}</td>
+                            <td>{{ list.avgSnbp }}</td>
                             <td style="width: 200px">
                                 <div
                                     v-on:click="showUpdateModal(id, list)"
@@ -182,7 +182,7 @@
                                         Avg Nilai SNPMB
                                     </label>
                                     <input
-                                        v-model="updateData.avgSnpmb"
+                                        v-model="updateData.avgSnbp"
                                         type="text"
                                         class="form-control"
                                         id="formGroupExampleInput"
@@ -292,7 +292,7 @@
                                         Avg Nilai SNPMB
                                     </label>
                                     <input
-                                        v-model="formData.avgSnpmb"
+                                        v-model="formData.avgSnbp"
                                         type="text"
                                         class="form-control"
                                         id="formGroupExampleInput"
@@ -355,7 +355,7 @@ export default {
                 name: "",
                 link: "",
                 avgSbmptn: 0,
-                avgSnpmb: 0,
+                avgSnbp: 0,
                 uuid_college: "",
             },
 
@@ -363,7 +363,7 @@ export default {
                 name: "",
                 link: "",
                 avgSbmptn: 0,
-                avgSnpmb: 0,
+                avgSnbp: 0,
                 uuid_college: "",
             },
             id: "",

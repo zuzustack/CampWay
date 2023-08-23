@@ -31,7 +31,7 @@ class StudyProgramController extends Controller
         $data->create([
             'name' => $request->name,
             'avgSbmptn' => $request->avgSbmptn,
-            'avgSnpmb' => $request->avgSnpmb,
+            'avgSnbp' => $request->avgSnbp,
             'link' => $request->link,
             'uuid_college' => $request->uuid_college,
         ]);
@@ -49,7 +49,7 @@ class StudyProgramController extends Controller
         $data->update($id,[
             'name' => $request->name,
             'avgSbmptn' => $request->avgSbmptn,
-            'avgSnpmb' => $request->avgSnpmb,
+            'avgSnbp' => $request->avgSnbp,
             'link' => $request->link,
         ]);
 

@@ -18,8 +18,10 @@ class FirebaseServiceProvider {
         $this->database = $this->firebase->createDatabase();
 
         if ($reference != "") {
+            $this->afterQuery = true;
             $this->reference = $reference;
             $this->table = $this->database->getReference($reference);
+            $this->result = $this->table->getValue();
         }
         return $this;
     }
@@ -97,13 +99,17 @@ class FirebaseServiceProvider {
         return $this;
     }
 
-    public function join($reference, $foreignId, $localId){
+
+    // JOIN LAH YA
+    public function join($reference, $foreignId, $localId, $name = "join1"){
+        $this->afterQuery = true;
         $table = $this->database->getReference($reference)->getValue();
 
         foreach ($this->result as $key => $value) {
             foreach ($table as $keyT => $valueT) {
                 if ($localId == 'id' && $value[$foreignId] == $keyT) {
-                    $this->result[$key][$keyT] = $valueT;
+                    $this->result[$key][$name] = $valueT;
+                    $this->result[$key][$name]['uuid'] = $keyT;
                 }
             }
         }
@@ -187,28 +193,28 @@ class FirebaseServiceProvider {
                 break;
             case '<':
                 foreach ($data as $key => $value) {
-                    if ($value[$column] == $valueWhere) {
+                    if ($value[$column] < $valueWhere) {
                         $arr[$key] = $value;
                     }
                 }
                 break;
             case '>':
                 foreach ($data as $key => $value) {
-                    if ($value[$column] == $valueWhere) {
+                    if ($value[$column] > $valueWhere) {
                         $arr[$key] = $value;
                     }
                 }
                 break;
             case '>=':
                 foreach ($data as $key => $value) {
-                    if ($value[$column] == $valueWhere) {
+                    if ($value[$column] >= $valueWhere) {
                         $arr[$key] = $value;
                     }
                 }
                 break;
             case '<=':
                 foreach ($data as $key => $value) {
-                    if ($value[$column] == $valueWhere) {
+                    if ($value[$column] <= $valueWhere) {
                         $arr[$key] = $value;
                     }
                 }

@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\StudyProgramController;
-
+use App\Providers\FirebaseServiceProvider;
 // use App\Http\Controllers\BookController;
 
 use Illuminate\Http\Request;
@@ -23,6 +23,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get("/", function(Request $request){
+    $test = new FirebaseServiceProvider();
+    $test->connect('studyPrograms')->where('avgSnbp',">=",$request->avgSnbp)->join('colleges', 'uuid_college', 'id',"college")->orderBy('avgSnbp','desc');
+
+    return response()->json([
+        'authToken' => $test->get()
+    ]);
 });
 
 Route::post("/auth/login", [AuthController::class, 'authLogin']);
