@@ -24266,7 +24266,7 @@ var BaseUrl = "";
 if (window.location.hostname == "admin.localhost") {
   BaseUrl = "http://localhost:8000/api/";
 } else {
-  BaseUrl = "https://c6d1-103-127-169-22.ngrok-free.app/api/";
+  BaseUrl = "http://localhost:8000/api/";
 }
 var axiosIns = axios__WEBPACK_IMPORTED_MODULE_2__["default"].create({
   // You can add your headers here
@@ -24322,7 +24322,7 @@ var BaseUrl = "";
 if (window.location.hostname == "localhost") {
   BaseUrl = "http://localhost:8000/api/";
 } else {
-  BaseUrl = "https://c6d1-103-127-169-22.ngrok-free.app/api/";
+  BaseUrl = "http://localhost:8000/api/";
 }
 var axiosIns = axios__WEBPACK_IMPORTED_MODULE_2__["default"].create({
   // You can add your headers here

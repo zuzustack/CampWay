@@ -8,7 +8,7 @@ let BaseUrl = "";
 if (window.location.hostname == "localhost") {
   BaseUrl = "http://localhost:8000/api/";
 } else {
-  BaseUrl = "https://c6d1-103-127-169-22.ngrok-free.app/api/";
+  BaseUrl = "http://localhost:8000/api/";
 }
 
 const axiosIns = axios.create({
