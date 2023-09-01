@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginAuth from "../page/LoginAuth"
 import HomePage from "../page/HomePage"
 import BookManagement from "../page/BookManagement"
+import ArticleManagement from "../page/ArticleManagement"
 import CollegeManagement from "../page/CollegeManagement"
 import CollegeDetail from "../page/CollegeDetail"
 import LayoutAdmin from "../../layout/LayoutAdmin"
-
 
 
 const routes =[
@@ -38,7 +38,7 @@ const routes =[
 
             {
                 path: "/articleManagement",
-                component: HomePage,
+                component: ArticleManagement,
                 name: "articleManagement"
             },
         ],

@@ -23,6 +23,7 @@
                                 >Email</label
                             >
                             <input
+                                v-model="formData.email"
                                 type="email"
                                 class="form-control"
                                 id="inputEmail4"
@@ -33,16 +34,19 @@
                                 >Password</label
                             >
                             <input
+                                v-model="formData.password"
                                 type="password"
                                 class="form-control"
                                 id="inputPassword4"
                             />
                         </div>
                         <div class="col-md-12 mt-3">
+                            <p class="mb-0 text-danger">{{ message_confirm_password }}</p>
                             <label for="inputPassword4" class="form-label m-0"
                                 >Confirm Password</label
                             >
                             <input
+                                v-model="formData.c_password"
                                 type="password"
                                 class="form-control"
                                 id="inputPassword4"
@@ -55,12 +59,12 @@
                             >
                                 Back
                             </router-link>
-                            <button
-                                type="submit"
+                            <a
+                                v-on:click="signin"
                                 class="ms-1 w-fit btn btn-outline-dark d-inline px-3"
                             >
                                 Buat Akun
-                            </button>
+                            </a>
                         </div>
                     </form>
                 </div>
@@ -68,3 +72,71 @@
         </div>
     </div>
 </template>
+
+<script>
+import swal from "../../plugins/swal";
+import router from "../routes";
+import { useAuthStore } from "../../store/modules/AuthModule";
+export default {
+    data() {
+        return {
+            formData: {
+                email: "",
+                password: "",
+                c_password: "",
+            },
+
+            message_confirm_password: "",
+        };
+    },
+
+    watch: {
+        'formData.password'() {
+            if (this.formData.c_password != this.formData.password) {
+                this.message_confirm_password = "Confirm Password Not Match"
+            } else {
+                this.message_confirm_password = ""
+            }
+        },
+
+        'formData.c_password'() {
+            if (this.formData.c_password != this.formData.password) {
+                this.message_confirm_password = "Confirm Password Not Match"
+            } else {
+                this.message_confirm_password = ""
+            }
+        }
+    },
+
+    methods: {
+        signin() {
+            const { authSigninUsers } = useAuthStore();
+
+            if (this.formData.email == "" || this.formData.c_password == "" || this.formData.password == "") {
+                return swal.toast("error", "The Input Form is Incomplete");
+            }
+
+
+            if (this.formData.c_password != this.formData.password) {
+                return swal.toast("error", "Confirm Password not Match");
+            }
+
+
+            authSigninUsers(this.formData).then((response) => {
+                swal.toast("success", "Success Create Account");
+                router.push({name: "login-auth"})
+            }).catch((response) => {
+                swal.toast("error", "Email Sudah Digunakan");
+            })
+
+            this.formData = {
+                email: "",
+                c_password: "",
+                password: "",
+            };
+        },
+    },
+
+    mounted() {},
+};
+</script>

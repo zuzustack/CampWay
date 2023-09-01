@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="card">
+        <h3 class="mb-3">Book Management</h3>
+        <div class="card shadow">
             <div class="card-body">
-                <h3 class="mb-3">Book Management</h3>
                 <div
                     class="ms-auto btn btn-success mb-2"
                     data-bs-toggle="modal"
@@ -23,9 +23,9 @@
                     <tbody>
                         <tr v-for="(list, id, index) in lists" :key="index">
                             <th scope="row">{{ index + 1 }}</th>
-                            <td>{{ list.title }}</td>
-                            <td>{{ list.link }}</td>
-                            <td>{{ list.imageLink }}</td>
+                            <td style="max-width: 300px !important;">{{ list.title }}</td>
+                            <td style="max-width: 300px !important;">{{ list.link }}</td>
+                            <td style="max-width: 300px !important;">{{ list.imageLink }}</td>
                             <td style="width: 200px">
                                 <div
                                     v-on:click="showUpdateModal(id, list)"

@@ -13,14 +13,10 @@ const state = {
 };
 
 const actions = {
-    async authLogin(formData) {
+    async getArticle() {
         this.status = "fetching";
         try {
-            const response = admin.post("/auth/login", {
-                email: formData.email,
-                password: formData.password,
-                isAdmin: true,
-            });
+            const response = admin.get("/article", setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -28,15 +24,10 @@ const actions = {
             throw e;
         }
     },
-
-
-    async authLoginUsers(formData) {
+    async updateArticle(id,formData) {
         this.status = "fetching";
         try {
-            const response = admin.post("/user/login", {
-                email: formData.email,
-                password: formData.password,
-            });
+            const response = admin.patch(`/article/${id}`, formData ,setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -44,15 +35,10 @@ const actions = {
             throw e;
         }
     },
-
-
-    async authSigninUsers(formData) {
+    async deleteArticle(id) {
         this.status = "fetching";
         try {
-            const response = admin.post("/user/signup", {
-                email: formData.email,
-                password: formData.password,
-            });
+            const response = admin.delete(`/article/${id}`, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -60,12 +46,10 @@ const actions = {
             throw e;
         }
     },
-
-
-    async me(formData) {
+    async createArticle(formData) {
         this.status = "fetching";
         try {
-            const response = admin.get("/auth/me", setHeader());
+            const response = admin.post("/article",formData, setHeader());
             this.data = response.data;
             return response;
         } catch (e) {
@@ -82,8 +66,8 @@ const persistenceConfig = {
     paths: ["data"],
 };
 
-export const useAuthStore = defineStore({
-    id: "auth",
+export const useArticleModule = defineStore({
+    id: "Articles",
     state: () => state,
     actions: actions,
     persist: persistenceConfig,

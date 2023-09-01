@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-lg sticky-top bg-violet">
         <div class="container">
-            <a class="navbar-brand text-white" href="#">CampWay</a>
+            <router-link class="navbar-brand text-white bg-none" :to="{name:'dashboard-guest'}">CampWay</router-link>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -22,7 +22,7 @@
                                 aria-current="page"
                                 :to="{name: 'login-auth'}"
                             >
-                                Login
+                                Masuk
                             </router-link>
                         </li>
                     </ul>

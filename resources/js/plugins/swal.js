@@ -16,6 +16,14 @@ let swal = {
         });
     },
 
+    fire: (icon,title,message) => {
+        Swal.fire({
+            icon: icon,
+            title: title,
+            text: message,
+          })
+    },
+
     confirm: (message, callback) => {
         Swal.fire({
             title: message,

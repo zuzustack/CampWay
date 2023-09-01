@@ -17,12 +17,13 @@
                 <div class="d-flex ms-auto" role="search">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <router-link
+                            <a
+                                v-on:click="logout"
+                                href="#"
                                 class="nav-link text-white"
                                 aria-current="page"
-                                :to="{name:'login-auth'}"
                                 >Log Out
-                            </router-link>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -30,3 +31,18 @@
         </div>
     </nav>
 </template>
+
+<script>
+import adminRouter from '../admin/routes';
+
+
+
+export default {
+    methods: {
+        logout(){
+            localStorage.setItem('authToken', "");
+            adminRouter.push({name:"login-auth"})
+        }
+    }
+}
+</script>

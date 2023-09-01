@@ -17,12 +17,13 @@
                         </router-link>
                     </small>
 
-                    <form method="get" class="row mt-3">
+                    <form class="row mt-3">
                         <div class="col-md-12">
-                            <label for="inputEmail4" class="form-label m-0"
-                                >Email</label
-                            >
+                            <label for="inputEmail4" class="form-label m-0">
+                                Email
+                            </label>
                             <input
+                                v-model="formData.email"
                                 type="email"
                                 class="form-control"
                                 id="inputEmail4"
@@ -33,6 +34,8 @@
                                 >Password</label
                             >
                             <input
+                                v-model="formData.password"
+                                autocomplete="off"
                                 type="password"
                                 class="form-control"
                                 id="inputPassword4"
@@ -45,12 +48,12 @@
                             >
                                 Back
                             </router-link>
-                            <button
-                                type="submit"
+                            <div
+                                v-on:click="login"
                                 class="ms-1 w-fit btn btn-outline-dark d-inline px-3"
                             >
                                 Login
-                            </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -58,3 +61,47 @@
         </div>
     </div>
 </template>
+
+<script>
+import swal from "../../plugins/swal";
+import router from "../routes";
+import { useAuthStore } from "../../store/modules/AuthModule";
+export default {
+    data() {
+        return {
+            formData: {
+                email: "",
+                password: "",
+            },
+        };
+    },
+
+    methods: {
+        login() {
+            const { authLoginUsers } = useAuthStore();
+
+            swal.showLoading();
+
+            authLoginUsers(this.formData)
+                .then((response) => {
+                    swal.toast("success", "Success Login");
+                    localStorage.setItem('authUserToken', response.data.data.token);
+                    router.push({name: "dashboard-login"});
+                })
+                .catch((response) => {
+                    swal.toast(
+                        "error",
+                        "Failed Login, Email Or Password Wrong"
+                    );
+                });
+
+            this.formData = {
+                email: "",
+                password: "",
+            };
+        },
+    },
+
+    mounted() {},
+};
+</script>

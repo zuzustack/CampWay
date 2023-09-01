@@ -50,6 +50,8 @@
 <script>
 import { useAuthStore } from '../../store/modules/AuthModule'
 import router from '../routes';
+import swal from "../../plugins/swal";
+
 
 export default {
     data(){
@@ -64,10 +66,9 @@ export default {
     methods: {
         login(){
             const { authLogin } = useAuthStore();
-
+            swal.showLoading()
             authLogin(this.formData).then((response) => {
                 localStorage.setItem('authToken', response.data.data.token);
-
                 router.push({name: "collegeManagement"});
             })
         }

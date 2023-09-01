@@ -159,14 +159,15 @@ class FirebaseServiceProvider {
 
     // Yah Where lahya
     public function where($column,$operator,$valueWhere){
-        $this->afterQuery = true;
-        try {
+        if (!$this->afterQuery) {
             $this->table = $this->table
                 ->orderByChild($column);
             $data = $this->table->getvalue(); 
-        } catch (\Throwable $th) {
-            $data = $this->table->getvalue();
+        } else {
+            $data = $this->result;
         }
+        $this->afterQuery = true;
+
         $arr = [];
         
         switch ($operator) {
